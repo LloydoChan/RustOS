@@ -1,25 +1,17 @@
 #![no_std]
 #![no_main]
 
+mod vga;
 use core::panic::PanicInfo;
-
-static HELLO: &[u8] = b"Hello World!";
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-    let vga_buffer = 0xb8000 as *mut u8;
-
-    for( i, &byte) in HELLO.iter().enumerate() {
-        unsafe{
-            *vga_buffer.offset(i as isize * 2) = byte; // byte value
-            *vga_buffer.offset(i as isize * 2 + 1) = 0xb; // color byte
-        }
-    }
-
+    println!("Hello {}", 42);
     loop{}
 }
 
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    println!("{}", _info);
     loop {}
 }
