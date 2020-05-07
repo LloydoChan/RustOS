@@ -144,3 +144,13 @@ pub fn _print(args: fmt::Arguments) {
     use core::fmt::Write;
     WRITER.lock().write_fmt(args).unwrap();
 }
+
+#[cfg(test)]
+use crate::{serial_print, serial_println};
+
+#[test_case]
+fn test_println_simple() {
+    serial_print!("test_println...");
+    println!("test_println_simple output");
+    serial_println!("[ok]");
+}
