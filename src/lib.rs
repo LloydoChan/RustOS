@@ -2,6 +2,7 @@
 #![cfg_attr(test, no_main)]
 #![feature(custom_test_frameworks)]
 #![feature(abi_x86_interrupt)]
+#![feature(alloc_error_handler)]
 #![test_runner(crate::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
@@ -18,6 +19,9 @@ pub mod vga;
 pub mod serial;
 pub mod interrupts;
 pub mod memory;
+pub mod allocator;
+
+extern crate alloc;
 
 pub fn test_panic_handler(_info: &PanicInfo) -> ! {
     serial_println!("[Failed]\n");
@@ -76,4 +80,9 @@ pub fn hlt_loop() -> ! {
     loop{
         x86_64::instructions::hlt();
     }
+}
+
+#[alloc_error_handler]
+fn alloc_error_handler(layout: alloc::alloc::Layout) -> ! {
+    panic!("alloc error {:?}", layout)
 }

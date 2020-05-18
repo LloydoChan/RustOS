@@ -5,6 +5,8 @@ use x86_64::{
     PhysAddr
 };
 
+use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
+
 pub unsafe fn init(physical_memory_offset: VirtAddr) -> OffsetPageTable<'static>{
     let level_4_table = active_level_4_table(physical_memory_offset);
     OffsetPageTable::new(level_4_table, physical_memory_offset)
@@ -37,16 +39,6 @@ pub fn create_example_mapping(
     let map_to_result = mapper.map_to(page, unused_frame, flags, frame_allocator);
     map_to_result.expect("map_to failed").flush();
 }
-
-pub struct EmptyFrameAllocator;
-
-unsafe impl FrameAllocator<Size4KiB> for EmptyFrameAllocator {
-    fn allocate_frame(&mut self) -> Option<UnusedPhysFrame> {
-        None
-    }
-}
-
-use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
 
 pub struct BootInfoFrameAllocator {
     memory_map: &'static MemoryMap,
