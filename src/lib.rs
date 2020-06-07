@@ -7,6 +7,7 @@
 #![feature(alloc_layout_extra)]
 #![feature(const_in_array_repeat_expressions)]
 #![test_runner(crate::test_runner)]
+#![feature(wake_trait)]
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
@@ -23,6 +24,7 @@ pub mod serial;
 pub mod interrupts;
 pub mod memory;
 pub mod allocator;
+pub mod task;
 
 extern crate alloc;
 
